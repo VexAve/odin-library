@@ -24,29 +24,27 @@ library.addEventListener("click", event => {
         const id = event.target.closest("tr").id;
         const index = findBookIndexById(id);
         myLibrary[index].read = event.target.checked;
+    } else if (event.target.type === "button") {
+        const tableRow = event.target.closest("tr")
+        const index = findBookIndexById(tableRow.id);
+        myLibrary.splice(index, 1);
+        tableRow.remove();
     }
 });
-
-function displayBooks() {
-    library.innerHTML = myLibrary.reduce((acc, val) =>
-        acc + `
-            <tr id="${val.id}">
-                <td>${val.title}</td>
-                <td>${val.author}</td>
-                <td>${val.pages}</td>
-                <td><input type="checkbox" ${val.read ? "checked" : ""}></td>
-            </tr>
-        `
-    , "");
-}
 
 function addBookToLibrary(title, author, pages, read) {
     const newBook = new Book(title, author, pages, read);
     myLibrary.push(newBook);
-    displayBooks();
+    library.innerHTML += `
+        <tr id="${newBook.id}">
+            <td>${newBook.title}</td>
+            <td>${newBook.author}</td>
+            <td>${newBook.pages}</td>
+            <td><input type="checkbox" ${newBook.read ? "checked" : ""}></td>
+            <td><input type="button" value="Delete"></td>
+        </tr>
+    `;
 }
-
-addBookToLibrary("3", "4", 3, true);
 
 const titleInput = document.getElementById("title");
 const authorInput = document.getElementById("author");
@@ -69,8 +67,7 @@ addBookButton.addEventListener("click", () => {
 });
 
 const submitButton = document.getElementById("submit");
-submitButton.addEventListener("click", event => {
-    event.preventDefault();
+submitButton.addEventListener("click", () => {
     addBookToLibrary(
         titleInput.value,
         authorInput.value,
@@ -81,7 +78,6 @@ submitButton.addEventListener("click", event => {
 });
 
 const cancelButton = document.getElementById("cancel");
-cancelButton.addEventListener("click", event => {
-    event.preventDefault();
+cancelButton.addEventListener("click", () => {
     resetForm();
 });
