@@ -24,7 +24,6 @@ library.addEventListener("click", event => {
         const id = event.target.closest("tr").id;
         const index = findBookIndexById(id);
         myLibrary[index].read = event.target.checked;
-        console.log(event.target.checked);
     }
 });
 
@@ -47,5 +46,42 @@ function addBookToLibrary(title, author, pages, read) {
     displayBooks();
 }
 
-addBookToLibrary("g", "b", 23, true);
+addBookToLibrary("3", "4", 3, true);
 
+const titleInput = document.getElementById("title");
+const authorInput = document.getElementById("author");
+const pagesInput = document.getElementById("pages");
+const readInput = document.getElementById("read");
+const newBookForm = document.getElementById("new-book-form");
+newBookForm.hidden = true;
+
+function resetForm() {
+    titleInput.value = "";
+    authorInput.value = "";
+    pagesInput.value = "";
+    readInput.checked = false;
+    newBookForm.hidden = true;
+}
+
+const addBookButton = document.getElementById("add-book");
+addBookButton.addEventListener("click", () => {
+    newBookForm.hidden = false;
+});
+
+const submitButton = document.getElementById("submit");
+submitButton.addEventListener("click", event => {
+    event.preventDefault();
+    addBookToLibrary(
+        titleInput.value,
+        authorInput.value,
+        pagesInput.value,
+        readInput.checked
+    );
+    resetForm();
+});
+
+const cancelButton = document.getElementById("cancel");
+cancelButton.addEventListener("click", event => {
+    event.preventDefault();
+    resetForm();
+});
